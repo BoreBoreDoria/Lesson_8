@@ -5,23 +5,35 @@ public class Main {
     public static void main(String[] args) {
         int number;
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Введи любое число");
+        System.out.println("Введи номер от 1 до 5");
 
-        try { // Блок, в котором пишем код для отслеживания ошибок. Если произошла ошибка,
-            // то программа ищем блок Catch с данной ошибкой
-            System.out.println("Открываем файл");
-            String s = scanner.next();
-            number = Integer.valueOf(s); // Если ввести строку в консоль, то будет вызвана ошибка NumberFormatException
-            System.out.println("Вы ввели число: " + number);
-            throw new OutOfMemoryError(); // Ключевое слово для принудительного вызова любой ошибки
-        } catch (IllegalArgumentException ex) { // Блок, который отлалвиает ошибку из блока try.
-            // Передаётся тип ошибки, который надо обрабатывать текущим блоком и её наследники.
-            // Т.к. NumberFormatException является наследником IllegalArgumentException,
-            // то её данный блок тоже поймает
-            System.out.println("К сожалению вы ввели не число, а что-то иное!");
-        } finally { // Блок, который независимо от исходя try всегда будет вызван. Даже если нет блока Catch,
-            // который обработает ошибку или был выполнени любой другой блок catch
-            System.out.println("Файл закрывается в finally");
+        int a = scanner.nextInt();
+        try {
+            switch (a) {
+                case 1:
+                    throw new RuntimeException("Отработала единичка");
+                case 2:
+                    throw new IllegalArgumentException("Отработала двоичка");
+                case 3:
+                    throw new NumberFormatException("Отработала Троичка");
+                case 4:
+                    throw new UserNotFoundException("3578");
+                case 5:
+                    throw new UserNotFoundException("3578", "Maxim");
+            }
+        } catch (UserNotFoundException e) { // При работе с несколькими Catch, очень важно соблюдать иерархию наследования.
+            // Потому-что catch ловит саму ошибку и всех её наследников
+            System.out.println(e.getMessage());
+        } catch (NumberFormatException ex) {
+            System.out.println(ex.getMessage());
+            System.out.println(Arrays.toString(ex.getStackTrace()));
+        } catch (IllegalArgumentException exception) {
+            System.out.println("Что-нибудь да хотим!");
+        } catch (Exception e) {
+            System.out.println("Где-то там, далеко. Что-то произошло, что я не знал");
         }
+
+        System.out.println("Мы ещё живы и работаем!");
+
     }
 }
